@@ -1,0 +1,68 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Live Position on Iceland Map</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        #map-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            background-image: url('iceland_map_nobg.png');
+            background-size: cover;
+            background-position: center;
+        }
+
+        #marker {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: red;
+            border-radius: 50%;
+            border: 2px solid white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+<body>
+    <div id="map-container">
+        <div id="marker" style="left:50%; top:50%;"></div>
+    </div>
+
+    <script>
+        const marker = document.getElementById('marker');
+
+        function updatePosition(lat, lon) {
+            // Coordinate di riferimento simulate per la mappa
+            const icelandRef = { lat: 64.96, lon: -19.02 };
+            const scale = 4;
+
+            let dx = (lon - icelandRef.lon) * scale * 100;
+            let dy = (lat - icelandRef.lat) * -scale * 100;
+
+            const left = 50 + dx;
+            const top = 50 + dy;
+
+            marker.style.left = `${left}%`;
+            marker.style.top = `${top}%`;
+        }
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    updatePosition(position.coords.latitude, position.coords.longitude);
+                }
+            );
+        }
+    </script>
+</body>
+</html>
